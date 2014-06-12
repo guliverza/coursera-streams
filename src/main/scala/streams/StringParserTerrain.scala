@@ -56,7 +56,7 @@ trait StringParserTerrain extends GameDef {
     (p: Pos) => p.col >= 0 && p.row >= 0 &&
       p.col < levelVector.length &&
       p.row < levelVector(p.col).length &&
-      levelVector(p.col)(p.row) == 'o'
+      Set('o','S','T').contains(levelVector(p.col)(p.row))
   }
 
   /**
@@ -67,7 +67,13 @@ trait StringParserTerrain extends GameDef {
    * Hint: you can use the functions `indexWhere` and / or `indexOf` of the
    * `Vector` class
    */
-  def findChar(c: Char, levelVector: Vector[Vector[Char]]): Pos = ???
+  def findChar(c: Char, levelVector: Vector[Vector[Char]]): Pos = {
+    for {
+      row <- 0 until levelVector.length
+      col <- 0 until levelVector(row).length
+      if levelVector(row)(col) == c
+    } yield new Pos(row, col)
+  }.head
 
   private lazy val vector: Vector[Vector[Char]] =
     Vector(level.split("\n").map(str => Vector(str: _*)): _*)
