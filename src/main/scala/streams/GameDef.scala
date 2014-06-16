@@ -33,10 +33,10 @@ trait GameDef {
    */
   case class Pos(row: Int, col: Int) {
     /** The position obtained by changing the `x` coordinate by `d` */
-    def dx(d: Int) = copy(row = row + d)
+    def drow(d: Int) = copy(row = row + d)
 
     /** The position obtained by changing the `y` coordinate by `d` */
-    def dy(d: Int) = copy(col = col + d)
+    def dcol(d: Int) = copy(col = col + d)
 
 
   }
@@ -104,34 +104,34 @@ trait GameDef {
      * Returns a block where the `x` coordinates of `b1` and `b2` are
      * changed by `d1` and `d2`, respectively.
      */
-    def dx(d1: Int, d2: Int) = Block(b1.dx(d1), b2.dx(d2))
+    def drow(d1: Int, d2: Int) = Block(b1.drow(d1), b2.drow(d2))
 
     /**
      * Returns a block where the `y` coordinates of `b1` and `b2` are
      * changed by `d1` and `d2`, respectively.
      */
-    def dy(d1: Int, d2: Int) = Block(b1.dy(d1), b2.dy(d2))
+    def dcol(d1: Int, d2: Int) = Block(b1.dcol(d1), b2.dcol(d2))
 
 
     /** The block obtained by moving left */
-    def left = if (isStanding)         dy(-2, -1)
-               else if (b1.row == b2.row)  dy(-1, -2)
-               else                    dy(-1, -1)
+    def left = if (isStanding)         dcol(-2, -1)
+               else if (b1.row == b2.row)  dcol(-1, -2)
+               else                    dcol(-1, -1)
 
     /** The block obtained by moving right */
-    def right = if (isStanding)        dy(1, 2)
-                else if (b1.row == b2.row) dy(2, 1)
-                else                   dy(1, 1)
+    def right = if (isStanding)        dcol(1, 2)
+                else if (b1.row == b2.row) dcol(2, 1)
+                else                   dcol(1, 1)
 
     /** The block obtained by moving up */
-    def up = if (isStanding)           dx(-2, -1)
-             else if (b1.row == b2.row)    dx(-1, -1)
-             else                      dx(-1, -2)
+    def up = if (isStanding)           drow(-2, -1)
+             else if (b1.row == b2.row)    drow(-1, -1)
+             else                      drow(-1, -2)
 
     /** The block obtained by moving down */
-    def down = if (isStanding)         dx(1, 2)
-               else if (b1.row == b2.row)  dx(1, 1)
-               else                    dx(2, 1)
+    def down = if (isStanding)         drow(1, 2)
+               else if (b1.row == b2.row)  drow(1, 1)
+               else                    drow(2, 1)
 
 
     /**
@@ -149,7 +149,7 @@ trait GameDef {
     /**
      * Returns `true` if the block is standing.
      */
-    def isStanding: Boolean = b1.row == b2.row && b1.col == b2.col
+    def isStanding: Boolean = b1 == b2
 
     /**
      * Returns `true` if the block is entirely inside the terrain.

@@ -56,6 +56,7 @@ class BloxorzSuite extends FunSuite {
 
   test("optimal solution for level 1") {
     new Level1 {
+      println(solution)
       val solve: Block = solve(solution)
       assert(solve === Block(goal, goal))
     }
@@ -64,6 +65,43 @@ class BloxorzSuite extends FunSuite {
   test("optimal solution length for level 1") {
     new Level1 {
       assert(solution.length === optsolution.length)
+    }
+  }
+
+  test("All possible moves from start position") {
+    new Level1 {
+      val neighbors: Stream[(Block, List[Move])] = newNeighborsOnly(Stream((startBlock, List())), Set(startBlock))
+
+      println(neighbors.toList)
+      assert(Stream((Block(Pos(1,2),Pos(1,3)),List(Right)), (Block(Pos(2,1),Pos(3,1)),List(Down))) === neighbors)
+      val next: Stream[(Block, List[Move])] = newNeighborsOnly(neighbors, Set(startBlock) ++ neighbors.map(_._1))
+      println(next.toList)
+      val next2: Stream[(Block, List[Move])] = newNeighborsOnly(next, Set(startBlock) ++ next.map(_._1) ++ neighbors.map(_._1))
+      println(next2.toList)
+    }
+  }
+
+  test("pathsFromStart") {
+    new Level1 {
+      println(pathsFromStart.mkString("\n"))
+      assert(Stream(1) === Stream(1))
+    }
+  }
+
+  test("pathsToGoal") {
+    new Level1 {
+      println("goal=" + goal)
+      println(pathsToGoal.take(5).toList.mkString("\n"))
+      assert(Stream(1) === Stream(1))
+    }
+  }
+
+  test("check done") {
+    new Level1 {
+      assert(done(Block(Pos(4,7), Pos(4,7))))
+      assert(!done(Block(Pos(4,7), Pos(5,7))))
+      assert(!done(Block(Pos(1,1), Pos(1,1))))
+      assert(!done(Block(Pos(0,0), Pos(0,0))))
     }
   }
 }

@@ -39,13 +39,12 @@ trait Solver extends GameDef {
    */
   def newNeighborsOnly(neighbors: Stream[(Block, List[Move])],
                        explored: Set[Block]): Stream[(Block, List[Move])] = neighbors match {
+    case Stream() => Stream.empty
     case (head, hist) #:: tail =>
-      val history: Stream[(Block, List[Move])] = neighborsWithHistory(head, hist)
-      if (explored.contains(head)) newNeighborsOnly(tail, explored)
-      else (head, hist) #:: newNeighborsOnly(tail, explored + head)
-
-//    val nextNeighbors = neighbors.flatMap{ case (b, h) => neighborsWithHistory(b, h) }
-//    nextNeighbors.filter{case (b, h) => !explored.contains(b)}
+      val neighbors: Stream[(Block, List[Move])] =
+        neighborsWithHistory(head, hist).
+          filter {case (b, h) => !explored.contains(b)}
+      neighbors ++ newNeighborsOnly(tail, explored ++ neighbors.map(_._1))
   }
 
   /**
@@ -72,23 +71,13 @@ trait Solver extends GameDef {
    * construct the correctly sorted stream.
    */
   def from(initial: Stream[(Block, List[Move])], explored: Set[Block]): Stream[(Block, List[Move])] = {
-    val next = newNeighborsOnly(initial, explored)
-    for {
-      (i, h) <- initial
-      (next, move) <- neighborsWithHistory()
-    } yield ()
-    initial.flatMap{case (b, h) => b.legalNeighbors}
-    val remaining = initial.dropWhile(hasNoNeighbors(_, explored))
-    // println("remaining is " + remaining)
-    if (remaining == Nil) initial // terminal case
+    println(explored)
+    val nextNeighbors: Stream[(Block, List[Move])] = newNeighborsOnly(initial, explored)
+    if (nextNeighbors.isEmpty) initial
     else {
-      val (thisBlock, thisHistory) = remaining.head
-      val newExplored = explored + thisBlock
-      val newNeighbours = newNeighborsOnly(neighborsWithHistory(thisBlock, thisHistory), newExplored)
-      val newInitial = initial ++ newNeighbours
-      from(newInitial, newExplored)
+      val newExplored: Set[Block] = explored ++ nextNeighbors.map(_._1)
+      from(initial ++ nextNeighbors, newExplored)
     }
-
   }
 
   def hasNoNeighbors(startPath: (Block, List[Move]), explored: Set[Block]): Boolean =
@@ -104,7 +93,7 @@ trait Solver extends GameDef {
    * with the history how it was reached.
    */
   lazy val pathsToGoal: Stream[(Block, List[Move])] =
-    pathsFromStart.filter( path => done(path._1)).toStream
+    pathsFromStart.filter{case (pos, path) => done(pos)}.toStream
 
   /**
    * The (or one of the) shortest sequence(s) of moves to reach the
