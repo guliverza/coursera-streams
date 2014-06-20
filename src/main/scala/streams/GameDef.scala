@@ -79,10 +79,10 @@ trait GameDef {
   sealed abstract class Move {
     def apply(b: Block): Block
   }
-  case object Left  extends Move{ override def apply(b: Block): Block = b.left }
-  case object Right extends Move{ override def apply(b: Block): Block = b.right }
-  case object Up    extends Move{ override def apply(b: Block): Block = b.up }
-  case object Down  extends Move{ override def apply(b: Block): Block = b.down }
+  case object Left  extends Move{ override def apply(b: Block): Block = b.left; override def toString = "←"; }
+  case object Right extends Move{ override def apply(b: Block): Block = b.right; override def toString = "→"; }
+  case object Up    extends Move{ override def apply(b: Block): Block = b.up; override def toString = "↑"; }
+  case object Down  extends Move{ override def apply(b: Block): Block = b.down; override def toString = "↓"; }
 
   /**
    * This function returns the block at the start position of

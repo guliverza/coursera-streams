@@ -41,8 +41,7 @@ trait Solver extends GameDef {
                        explored: Set[Block]): Stream[(Block, List[Move])] = neighbors match {
     case Stream() => Stream.empty
     case (head, hist) #:: tail =>
-      val neighbors: Stream[(Block, List[Move])] =
-        neighborsWithHistory(head, hist).
+      val neighbors = neighborsWithHistory(head, hist).
           filter {case (b, h) => !explored.contains(b)}
       neighbors ++ newNeighborsOnly(tail, explored ++ neighbors.map(_._1))
   }
@@ -71,12 +70,12 @@ trait Solver extends GameDef {
    * construct the correctly sorted stream.
    */
   def from(initial: Stream[(Block, List[Move])], explored: Set[Block]): Stream[(Block, List[Move])] = {
-    println(explored)
+    println(initial.mkString("\n"))
     val nextNeighbors: Stream[(Block, List[Move])] = newNeighborsOnly(initial, explored)
     if (nextNeighbors.isEmpty) initial
     else {
       val newExplored: Set[Block] = explored ++ nextNeighbors.map(_._1)
-      from(initial ++ nextNeighbors, newExplored)
+      from(nextNeighbors, newExplored)
     }
   }
 

@@ -42,6 +42,29 @@ class BloxorzSuite extends FunSuite {
   test("terrain function level 1") {
     new Level1 {
       assert(terrain(Pos(0,0)), "0,0")
+      assert(terrain(Pos(0,1)), "0,1")
+      assert(terrain(Pos(0,2)), "0,2")
+      assert(!terrain(Pos(0,3)), "0,3")
+      assert(!terrain(Pos(0,4)), "0,4")
+      assert(!terrain(Pos(0,5)), "0,5")
+      assert(!terrain(Pos(0,6)), "0,6")
+      assert(!terrain(Pos(0,7)), "0,7")
+      assert(!terrain(Pos(0,8)), "0,8")
+      assert(!terrain(Pos(0,9)), "0,9")
+      assert(!terrain(Pos(0,10)), "0,10")
+
+      assert(terrain(Pos(1,0)), "1,0")
+      assert(terrain(Pos(1,1)), "1,1")
+      assert(terrain(Pos(1,2)), "1,2")
+      assert(terrain(Pos(1,3)), "1,3")
+      assert(terrain(Pos(1,4)), "1,4")
+      assert(terrain(Pos(1,5)), "1,5")
+      assert(!terrain(Pos(1,6)), "1,6")
+      assert(!terrain(Pos(1,7)), "1,7")
+      assert(!terrain(Pos(1,8)), "1,8")
+      assert(!terrain(Pos(1,9)), "1,9")
+      assert(!terrain(Pos(1,10)), "1,10")
+
       assert(!terrain(Pos(4,11)), "4,11")
     }
   }
