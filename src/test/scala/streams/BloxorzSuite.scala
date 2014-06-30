@@ -78,6 +78,7 @@ class BloxorzSuite extends FunSuite {
 
   test("optimal solution for level 1") {
     new Level1 {
+//      println("-= optimal solution for level 1 =-")
       println(solution)
       val solve: Block = solve(solution)
       assert(solve === Block(goal, goal))
@@ -94,12 +95,12 @@ class BloxorzSuite extends FunSuite {
     new Level1 {
       val neighbors: Stream[(Block, List[Move])] = newNeighborsOnly(Stream((startBlock, List())), Set(startBlock))
 
-      println(neighbors.toList)
+//      println(neighbors.toList)
       assert(Stream((Block(Pos(1,2),Pos(1,3)),List(Right)), (Block(Pos(2,1),Pos(3,1)),List(Down))) === neighbors)
       val next: Stream[(Block, List[Move])] = newNeighborsOnly(neighbors, Set(startBlock) ++ neighbors.map(_._1))
-      println(next.toList)
+//      println(next.toList)
       val next2: Stream[(Block, List[Move])] = newNeighborsOnly(next, Set(startBlock) ++ next.map(_._1) ++ neighbors.map(_._1))
-      println(next2.toList)
+//      println(next2.toList)
     }
   }
 

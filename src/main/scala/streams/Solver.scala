@@ -70,12 +70,12 @@ trait Solver extends GameDef {
    * construct the correctly sorted stream.
    */
   def from(initial: Stream[(Block, List[Move])], explored: Set[Block]): Stream[(Block, List[Move])] = {
-    println(initial.mkString("\n"))
+//    println(initial.mkString("\n"))
     val nextNeighbors: Stream[(Block, List[Move])] = newNeighborsOnly(initial, explored)
     if (nextNeighbors.isEmpty) initial
     else {
       val newExplored: Set[Block] = explored ++ nextNeighbors.map(_._1)
-      from(nextNeighbors, newExplored)
+      initial ++ from(nextNeighbors, newExplored)
     }
   }
 
